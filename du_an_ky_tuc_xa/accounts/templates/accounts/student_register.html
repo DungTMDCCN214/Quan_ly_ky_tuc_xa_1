@@ -1,0 +1,45 @@
+<!-- accounts/templates/accounts/student_register.html -->
+{% extends 'base.html' %}
+
+{% block title %}Đăng ký Sinh viên{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">🎓 Đăng ký Tài khoản Sinh viên</h4>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label class="form-label">Tên đăng nhập *</label>
+                        <input type="text" name="username" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Họ và tên *</label>
+                        <input type="text" name="full_name" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Email *</label>
+                        <input type="email" name="email" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Số điện thoại</label>
+                        <input type="text" name="phone" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Mật khẩu *</label>
+                        <input type="password" name="password" class="form-control" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Đăng ký</button>
+                </form>
+                <div class="text-center mt-3">
+                    <a href="{% url 'student_login' %}">Đã có tài khoản? Đăng nhập</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

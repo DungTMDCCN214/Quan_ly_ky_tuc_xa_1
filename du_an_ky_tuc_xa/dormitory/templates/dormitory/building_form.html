@@ -1,0 +1,41 @@
+<!-- dormitory/templates/dormitory/building_form.html -->
+{% extends 'base.html' %}
+
+{% block title %}{% if form.instance.pk %}Sửa{% else %}Thêm{% endif %} Tòa nhà{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4>{% if form.instance.pk %}✏️ Sửa{% else %}➕ Thêm{% endif %} Tòa nhà</h4>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label class="form-label">Tên tòa nhà</label>
+                        {{ form.name }}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Địa chỉ</label>
+                        {{ form.address }}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Số tầng</label>
+                        {{ form.total_floors }}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Mô tả</label>
+                        {{ form.description }}
+                    </div>
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="{% url 'building_list' %}" class="btn btn-secondary me-md-2">↩️ Quay lại</a>
+                        <button type="submit" class="btn btn-primary">💾 Lưu</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

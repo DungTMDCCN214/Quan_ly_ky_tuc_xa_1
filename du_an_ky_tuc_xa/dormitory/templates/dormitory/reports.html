@@ -1,0 +1,222 @@
+<!-- dormitory/templates/dormitory/reports.html -->
+{% extends 'base.html' %}
+
+{% block title %}Báo cáo & Thống kê{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>📊 Báo cáo & Thống kê</h1>
+    <div>
+        <div class="btn-group">
+            <a href="{% url 'export_rooms_excel' %}" class="btn btn-outline-success">📊 Xuất Excel</a>
+            <a href="{% url 'export_rooms_pdf' %}" class="btn btn-outline-danger">📄 Xuất PDF</a>
+        </div>
+        <button class="btn btn-success ms-2" onclick="window.print()">🖨️ In báo cáo</button>
+        <a href="{% url 'dashboard' %}" class="btn btn-outline-secondary ms-2">📊 Dashboard</a>
+    </div>
+</div>
+<!-- THỐNG KÊ TỔNG QUAN -->
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card border-left-primary shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                            Tổng phòng
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                            {{ room_stats.total }}
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-door-closed fa-2x text-gray-300">🚪</i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3">
+        <div class="card border-left-success shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                            Phòng trống
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                            {{ room_stats.available }}
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-bed fa-2x text-gray-300">✅</i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3">
+        <div class="card border-left-warning shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                            Tỷ lệ lấp đầy
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                            {{ room_stats.occupancy_percentage|floatformat:1 }}%
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-chart-pie fa-2x text-gray-300">📈</i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3">
+        <div class="card border-left-info shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                            HĐ sắp hết hạn
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                            {{ contract_stats.upcoming_expiry }}
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-clock fa-2x text-gray-300">⏰</i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- BIỂU ĐỒ PHÂN BỐ PHÒNG -->
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h5>📊 Phân bố trạng thái phòng</h5>
+            </div>
+            <div class="card-body">
+                <div class="text-center">
+                    <div class="row">
+                        <div class="col-4">
+                            <div class="text-success">
+                                <h3>{{ room_stats.available }}</h3>
+                                <small>✅ Còn trống</small>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="text-danger">
+                                <h3>{{ room_stats.occupied }}</h3>
+                                <small>⛔ Đã thuê</small>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="text-warning">
+                                <h3>{{ room_stats.maintenance }}</h3>
+                                <small>🛠️ Bảo trì</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <h5>📈 Thống kê hợp đồng</h5>
+            </div>
+            <div class="card-body">
+                <div class="row text-center">
+                    <div class="col-4">
+                        <div class="text-success">
+                            <h3>{{ contract_stats.active }}</h3>
+                            <small>✅ Đang hoạt động</small>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="text-danger">
+                            <h3>{{ contract_stats.expired }}</h3>
+                            <small>❌ Đã hết hạn</small>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="text-warning">
+                            <h3>{{ contract_stats.upcoming_expiry }}</h3>
+                            <small>⏰ Sắp hết hạn</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- THỐNG KÊ THEO TÒA NHÀ -->
+<div class="card mt-4">
+    <div class="card-header bg-info text-white">
+        <h5>🏢 Thống kê theo tòa nhà</h5>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Tòa nhà</th>
+                        <th>Tổng phòng</th>
+                        <th>Phòng đã thuê</th>
+                        <th>Tỷ lệ lấp đầy</th>
+                        <th>Phòng trống</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for building in building_stats %}
+                    <tr>
+                        <td><strong>{{ building.name }}</strong></td>
+                        <td>{{ building.total_rooms }}</td>
+                        <td>{{ building.occupied_rooms }}</td>
+                        <td>
+                            {% if building.total_rooms > 0 %}
+                                <span class="badge bg-{% if building.occupancy_rate >= 80 %}danger{% else %}success{% endif %}">
+                                    {{ building.occupancy_rate|floatformat:1 }}%
+                                </span>
+                            {% else %}
+                                <span class="badge bg-secondary">0%</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ building.available_rooms }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- BÁO CÁO DOANH THU (Placeholder) -->
+<div class="card mt-4">
+    <div class="card-header bg-warning text-dark">
+        <h5>💰 Báo cáo doanh thu (Coming Soon)</h5>
+    </div>
+    <div class="card-body">
+        <p class="text-muted">Tính năng báo cáo doanh thu sẽ được cập nhật trong phiên bản tiếp theo.</p>
+        <ul>
+            <li>📅 Doanh thu theo tháng/quý/năm</li>
+            <li>📊 Biểu đồ tăng trưởng doanh thu</li>
+            <li>📈 Phân tích xu hướng</li>
+            <li>📋 Báo cáo chi tiết</li>
+        </ul>
+    </div>
+</div>
+{% endblock %}

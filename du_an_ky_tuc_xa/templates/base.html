@@ -1,0 +1,157 @@
+<!-- templates/base.html -->
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}Quản lý Ký túc xá{% endblock %}</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      .navbar-brand {
+        font-weight: bold;
+      }
+      .card {
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+      }
+      .sidebar {
+        background-color: #f8f9fa;
+        min-height: 100vh;
+      }
+      .nav-link {
+        color: #333;
+      }
+      .nav-link:hover {
+        background-color: #e9ecef;
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+      <div class="container">
+        <a class="navbar-brand" href="{% url 'home' %}">🏠 Ký túc xá</a>
+
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <div class="navbar-nav ms-auto">
+            {% if user.is_authenticated %}
+              {% if user.user_type == 'student' %}
+              <!-- MENU CHO SINH VIÊN -->
+              <a class="nav-link" href="/student/dashboard/">🎓 Dashboard SV</a>
+              <a class="nav-link" href="#">👤 {{ user.username }}</a>
+              {% else %}
+              <!-- MENU CHO QUẢN LÝ -->
+              <a class="nav-link" href="/dashboard/">📊 Dashboard</a>
+              <a class="nav-link" href="/admin/">⚙️ Admin</a>
+              <a class="nav-link" href="#">👤 {{ user.username }}</a>
+              {% endif %}
+              <a class="nav-link" href="/accounts/logout/">🚪 Đăng xuất</a>
+            {% else %}
+            <!-- MENU KHI CHƯA ĐĂNG NHẬP -->
+            <a class="nav-link" href="/accounts/login/">🔐 Đăng nhập SV</a>
+            <a class="nav-link" href="/student/register/">📝 Đăng ký SV</a>
+            <a class="nav-link" href="/admin/">⚙️ Quản lý</a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container-fluid">
+      <div class="row">
+        <!-- Sidebar Menu -->
+        {% if user.is_authenticated and user.user_type == 'manager' or user.user_type == 'staff' or user.is_staff %}
+        <nav class="col-md-3 col-lg-2 d-md-block sidebar collapse bg-light">
+          <div class="position-sticky pt-3">
+            <h6
+              class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted"
+            >
+              <span>📋 QUẢN LÝ</span>
+            </h6>
+            <ul class="nav flex-column">
+              <li class="nav-item">
+                <a class="nav-link" href="/dashboard/">
+                  📊 Dashboard
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/buildings/">
+                  🏢 Tòa nhà
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/rooms/"> 🚪 Phòng </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/students/">
+                  🎓 Sinh viên
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/contracts/">
+                  📄 Hợp đồng
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/reports/"> 📊 Báo cáo </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/payments/">
+                  💰 Thanh toán
+                </a>
+              </li>
+            </ul>
+
+            <h6
+              class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted"
+            >
+              <span>⚙️ HỆ THỐNG</span>
+            </h6>
+            <ul class="nav flex-column mb-2">
+              <li class="nav-item">
+                <a class="nav-link" href="/admin/"> ⚙️ Admin Panel </a>
+              </li>
+            </ul>
+          </div>
+        </nav>
+        {% endif %}
+
+        <!-- Main content -->
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+          <div class="container mt-4">
+            {% if messages %}
+              {% for message in messages %}
+              <div class="alert alert-{{ message.tags }} alert-dismissible fade show">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+              </div>
+              {% endfor %}
+            {% endif %}
+            
+            {% block content %}
+            {% endblock %}
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <footer class="bg-dark text-light mt-5 py-4">
+      <div class="container text-center">
+        <p>&copy; 2024 Hệ thống Quản lý Ký túc xá. All rights reserved.</p>
+      </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

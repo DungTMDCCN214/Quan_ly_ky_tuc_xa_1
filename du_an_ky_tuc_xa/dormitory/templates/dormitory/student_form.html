@@ -1,0 +1,60 @@
+
+{% extends 'base.html' %}
+
+{% block title %}{% if form.instance.pk %}Sửa{% else %}Thêm{% endif %} Sinh viên{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4>{% if form.instance.pk %}✏️ Sửa{% else %}➕ Thêm{% endif %} Sinh viên</h4>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Mã sinh viên *</label>
+                            {{ form.student_id }}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Tài khoản *</label>
+                            {{ form.user }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Họ và tên *</label>
+                            {{ form.full_name }}
+                            <small class="form-text text-muted">Nhập họ tên đầy đủ</small>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Ngày sinh</label>
+                            {{ form.date_of_birth }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Trường *</label>
+                            {{ form.university }}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Khoa *</label>
+                            {{ form.faculty }}
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Khóa *</label>
+                        {{ form.course }}
+                    </div>
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="{% url 'student_list' %}" class="btn btn-secondary me-md-2">↩️ Quay lại</a>
+                        <button type="submit" class="btn btn-primary">💾 Lưu</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,141 @@
+<!-- dormitory/templates/dormitory/building_list.html -->
+{% extends 'base.html' %}
+
+{% block title %}Quản lý Tòa nhà{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>🏢 Quản lý Tòa nhà</h1>
+    <a href="{% url 'building_create' %}" class="btn btn-primary">➕ Thêm Tòa nhà</a>
+</div>
+
+<!-- SEARCH BOX -->
+<div class="card mb-4">
+    <div class="card-body">
+        <form method="get" class="row g-3 align-items-center">
+            <div class="col-md-8">
+                <div class="input-group">
+                    <input type="text" name="search" class="form-control" 
+                           placeholder="Tìm kiếm theo tên tòa nhà, địa chỉ..." 
+                           value="{{ search_query }}">
+                    <button type="submit" class="btn btn-primary">🔍 Tìm kiếm</button>
+                </div>
+            </div>
+            <div class="col-md-4">
+                {% if search_query %}
+                <a href="{% url 'building_list' %}" class="btn btn-outline-secondary">🔄 Xóa tìm kiếm</a>
+                {% endif %}
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- KẾT QUẢ TÌM KIẾM -->
+{% if search_query %}
+<div class="alert alert-info mb-3">
+    🔍 Kết quả tìm kiếm cho: "<strong>{{ search_query }}</strong>"
+    <span class="badge bg-primary ms-2">{{ page_obj.paginator.count }} kết quả</span>
+</div>
+{% endif %}
+
+<div class="card">
+    <div class="card-header bg-light">
+        <div class="d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">📋 Danh sách tòa nhà</h5>
+            <span class="badge bg-secondary">
+                Trang {{ page_obj.number }} • Tổng: {{ page_obj.paginator.count }} tòa nhà
+            </span>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Tên tòa nhà</th>
+                        <th>Địa chỉ</th>
+                        <th>Số tầng</th>
+                        <th>Số phòng</th>
+                        <th>Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for building in page_obj %}
+                    <tr>
+                        <td><strong>{{ building.name }}</strong></td>
+                        <td>{{ building.address|truncatewords:10 }}</td>
+                        <td>{{ building.total_floors }}</td>
+                        <td>
+                            <span class="badge bg-info">{{ building.room_set.count }} phòng</span>
+                        </td>
+                        <td>
+                            <a href="{% url 'building_edit' building.pk %}" class="btn btn-sm btn-outline-primary">✏️ Sửa</a>
+                            <a href="{% url 'building_delete' building.pk %}" class="btn btn-sm btn-outline-danger">🗑️ Xóa</a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" class="text-center py-4">
+                            {% if search_query %}
+                            <div class="text-muted">
+                                <p>❌ Không tìm thấy tòa nhà nào phù hợp</p>
+                                <a href="{% url 'building_list' %}" class="btn btn-sm btn-outline-primary">Xem tất cả tòa nhà</a>
+                            </div>
+                            {% else %}
+                            <div class="text-muted">
+                                <p>📭 Chưa có tòa nhà nào</p>
+                                <a href="{% url 'building_create' %}" class="btn btn-sm btn-primary">Thêm tòa nhà đầu tiên</a>
+                            </div>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- PHÂN TRANG -->
+{% if page_obj.paginator.num_pages > 1 %}
+<nav aria-label="Page navigation" class="mt-4">
+    <ul class="pagination justify-content-center">
+        {% if page_obj.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page=1{% if search_query %}&search={{ search_query }}{% endif %}">« Đầu</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}">‹ Trước</a>
+            </li>
+        {% endif %}
+
+        {% for num in page_obj.paginator.page_range %}
+            {% if page_obj.number == num %}
+                <li class="page-item active">
+                    <span class="page-link">{{ num }}</span>
+                </li>
+            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ num }}{% if search_query %}&search={{ search_query }}{% endif %}">{{ num }}</a>
+                </li>
+            {% endif %}
+        {% endfor %}
+
+        {% if page_obj.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}">Tiếp ›</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% if search_query %}&search={{ search_query }}{% endif %}">Cuối »</a>
+            </li>
+        {% endif %}
+    </ul>
+</nav>
+
+<!-- THÔNG TIN TRANG -->
+<div class="text-center text-muted mt-2">
+    Trang {{ page_obj.number }} / {{ page_obj.paginator.num_pages }} 
+    • {{ page_obj.paginator.count }} kết quả
+</div>
+{% endif %}
+{% endblock %}

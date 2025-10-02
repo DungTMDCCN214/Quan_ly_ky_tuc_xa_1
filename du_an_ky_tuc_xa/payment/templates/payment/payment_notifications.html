@@ -1,0 +1,36 @@
+<!-- payment/templates/payment/payment_notifications.html -->
+<div class="card mt-4">
+    <div class="card-header bg-warning text-dark">
+        <h5 class="mb-0">🔔 Thông báo Thanh toán</h5>
+    </div>
+    <div class="card-body">
+        {% if overdue_payments %}
+        <div class="alert alert-danger">
+            <h6>⚠️ Hóa đơn quá hạn</h6>
+            <ul class="mb-0">
+                {% for payment in overdue_payments %}
+                <li>
+                    HĐ #{{ payment.id }} - {{ payment.contract.student.student_id }} 
+                    - {{ payment.amount|floatformat:0 }} VNĐ
+                    (Hạn: {{ payment.due_date|date:"d/m/Y" }})
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+        
+        {% if upcoming_payments %}
+        <div class="alert alert-info">
+            <h6>📅 Hóa đơn sắp đến hạn</h6>
+            <ul class="mb-0">
+                {% for payment in upcoming_payments %}
+                <li>
+                    HĐ #{{ payment.id }} - {{ payment.contract.student.student_id }}
+                    - Hạn: {{ payment.due_date|date:"d/m/Y" }}
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+    </div>
+</div>

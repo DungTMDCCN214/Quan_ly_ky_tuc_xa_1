@@ -1,0 +1,60 @@
+<!-- dormitory/templates/dormitory/room_booking.html -->
+{% extends 'base.html' %}
+
+{% block title %}Đăng ký Phòng {{ room.room_number }}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">🏠 Đăng ký Phòng {{ room.room_number }}</h4>
+            </div>
+            <div class="card-body">
+                <!-- Thông tin phòng -->
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <h6>📋 Thông tin Phòng</h6>
+                        <p><strong>Tòa nhà:</strong> {{ room.building.name }}</p>
+                        <p><strong>Phòng:</strong> {{ room.room_number }}</p>
+                        <p><strong>Loại phòng:</strong> {{ room.room_type.name }}</p>
+                        <p><strong>Sức chứa:</strong> {{ room.room_type.capacity }} người</p>
+                    </div>
+                    <div class="col-md-6">
+                        <h6>💰 Chi phí</h6>
+                        <p><strong>Giá thuê/tháng:</strong> {{ room.room_type.price_per_month|floatformat:0 }} VNĐ</p>
+                        <p><strong>Tiền cọc:</strong> {{ room.room_type.price_per_month|floatformat:0 }} VNĐ</p>
+                        <p><strong>Tổng ban đầu:</strong> {{ room.room_type.price_per_month|floatformat:0|add:room.room_type.price_per_month|floatformat:0 }} VNĐ</p>
+                    </div>
+                </div>
+
+                <!-- Thông tin sinh viên -->
+                <div class="alert alert-info">
+                    <h6>👤 Thông tin Sinh viên</h6>
+                    <p><strong>Mã SV:</strong> {{ student.student_id }}</p>
+                    <p><strong>Họ tên:</strong> {{ student.full_name }}</p>
+                    <p><strong>Trường:</strong> {{ student.university }}</p>
+                </div>
+
+                <!-- Form đăng ký -->
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="alert alert-warning">
+                        <h6>⚠️ Lưu ý quan trọng</h6>
+                        <ul class="mb-0">
+                            <li>Hợp đồng có thời hạn 1 năm</li>
+                            <li>Cần thanh toán tiền cọc ngay khi đăng ký</li>
+                            <li>Không thể hủy hợp đồng sau khi đăng ký</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between">
+                        <a href="{% url 'student_dashboard' %}" class="btn btn-secondary">← Quay lại</a>
+                        <button type="submit" class="btn btn-success">✅ Xác nhận Đăng ký</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

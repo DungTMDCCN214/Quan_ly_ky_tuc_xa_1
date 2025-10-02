@@ -1,0 +1,63 @@
+<!-- payment/templates/payment/payment_form.html -->
+{% extends 'base.html' %}
+
+{% block title %}{% if form.instance.pk %}Sửa{% else %}Tạo{% endif %} Hóa đơn{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">{% if form.instance.pk %}✏️ Sửa{% else %}➕ Tạo{% endif %} Hóa đơn</h4>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Hợp đồng *</label>
+                            {{ form.contract }}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Số tiền *</label>
+                            {{ form.amount }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Phương thức thanh toán</label>
+                            {{ form.payment_method }}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Trạng thái</label>
+                            {{ form.status }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Hạn thanh toán *</label>
+                            {{ form.due_date }}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Ngày thanh toán</label>
+                            {{ form.paid_date }}
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Mã giao dịch</label>
+                        {{ form.transaction_id }}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Ghi chú</label>
+                        {{ form.notes }}
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <a href="{% url 'payment_list' %}" class="btn btn-secondary">Hủy</a>
+                        <button type="submit" class="btn btn-primary">💾 Lưu</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

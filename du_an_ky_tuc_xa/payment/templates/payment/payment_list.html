@@ -1,0 +1,108 @@
+<!-- payment/templates/payment/payment_list.html -->
+{% extends 'base.html' %}
+
+{% block title %}Quản lý Thanh toán{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>💰 Quản lý Thanh toán</h1>
+    {% if user.user_type != 'student' %}
+    <a href="{% url 'payment_create' %}" class="btn btn-primary">➕ Tạo Hóa đơn</a>
+    {% endif %}
+</div>
+
+<!-- THỐNG KÊ -->
+<div class="row mb-4">
+    <div class="col-md-4">
+        <div class="card border-left-warning shadow">
+            <div class="card-body">
+                <div class="text-warning">⏳ Chờ thanh toán</div>
+                <h3>{{ stats.total_pending }}</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card border-left-success shadow">
+            <div class="card-body">
+                <div class="text-success">✅ Đã thanh toán</div>
+                <h3>{{ stats.total_paid }}</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card border-left-primary shadow">
+            <div class="card-body">
+                <div class="text-primary">💰 Tổng thu</div>
+                <h3>{{ stats.total_amount|floatformat:0 }} VNĐ</h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header bg-light">
+        <h5 class="mb-0">📋 Danh sách hóa đơn</h5>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Mã HĐ</th>
+                        <th>Sinh viên</th>
+                        <th>Phòng</th>
+                        <th>Số tiền</th>
+                        <th>Hạn thanh toán</th>
+                        <th>Trạng thái</th>
+                        <th>Phương thức</th>
+                        <th>Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for payment in payments %}
+                    <tr>
+                        <td><strong>#{{ payment.id }}</strong></td>
+                        <td>
+                            {{ payment.contract.student.student_id }}<br>
+                            <small>{{ payment.contract.student.full_name }}</small>
+                        </td>
+                        <td>{{ payment.contract.room.building.name }} - P.{{ payment.contract.room.room_number }}</td>
+                        <td><strong>{{ payment.amount|floatformat:0 }} VNĐ</strong></td>
+                        <td>
+                            {{ payment.due_date|date:"d/m/Y" }}
+                            {% if payment.due_date < today %}
+                            <span class="badge bg-danger">Quá hạn</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <span class="badge 
+                                {% if payment.status == 'paid' %}bg-success
+                                {% elif payment.status == 'pending' %}bg-warning
+                                {% else %}bg-danger{% endif %}">
+                                {{ payment.get_status_display }}
+                            </span>
+                        </td>
+                        <td>{{ payment.get_payment_method_display }}</td>
+                        <td>
+                            <a href="{% url 'payment_detail' payment.pk %}" class="btn btn-sm btn-outline-primary">👁️ Xem</a>
+                            {% if user.user_type != 'student' %}
+                            <a href="{% url 'payment_update' payment.pk %}" class="btn btn-sm btn-outline-secondary">✏️ Sửa</a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="8" class="text-center py-4">
+                            <p class="text-muted">📭 Chưa có hóa đơn nào</p>
+                            {% if user.user_type != 'student' %}
+                            <a href="{% url 'payment_create' %}" class="btn btn-sm btn-primary">Tạo hóa đơn đầu tiên</a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

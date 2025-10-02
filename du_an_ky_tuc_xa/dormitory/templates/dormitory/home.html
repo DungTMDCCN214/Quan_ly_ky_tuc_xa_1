@@ -1,0 +1,106 @@
+<!-- dormitory/templates/dormitory/home.html -->
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Trang chủ - Ký túc xá{% endblock %}
+{% block content %}
+
+<div class="row">
+  <div class="col-md-8 mx-auto text-center">
+    <div class="hero-section">
+      <h1 class="display-4">🏠 Hệ thống Quản lý Ký túc xá</h1>
+      <p class="lead">
+        Chào mừng bạn đến với hệ thống quản lý ký túc xá hiện đại
+      </p>
+      <hr class="my-4" />
+
+      {% if not user.is_authenticated %}
+      <div class="mt-4">
+        <a href="/admin/" class="btn btn-primary btn-lg me-3">
+          🔐 Đăng nhập Quản lý
+        </a>
+      </div>
+      {% else %}
+      <div class="mt-4">
+        {% comment %} {% if user.user_type == 'student' %}
+        <a href="{% url 'student_dashboard' %}" class="btn btn-success btn-lg">
+          🎓 Vào Dashboard Sinh viên
+        </a>
+        {% else %} {% endcomment %}
+        <a href="{% url 'dashboard' %}" class="btn btn-success btn-lg">
+          ⚙️ Vào Trang Quản lý
+        </a>
+        {% comment %} {% endif %} {% endcomment %}
+      </div>
+      {% endif %}
+    </div>
+
+    <div class="row mt-5">
+      <div class="col-md-3">
+        <div class="card text-white bg-primary stats-card">
+          <div class="card-body text-center">
+            <h2>{{ total_buildings }}</h2>
+            <p>🏢 Tòa nhà</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card text-white bg-success stats-card">
+          <div class="card-body text-center">
+            <h2>{{ total_rooms }}</h2>
+            <p>🚪 Tổng phòng</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card text-white bg-warning stats-card">
+          <div class="card-body text-center">
+            <h2>{{ available_rooms }}</h2>
+            <p>✅ Phòng trống</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card text-white bg-info stats-card">
+          <div class="card-body text-center">
+            <h2>{{ active_contracts }}</h2>
+            <p>📄 Hợp đồng</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row mt-5">
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-header bg-success text-white">
+            <h5>🎓 Dành cho Sinh viên</h5>
+          </div>
+          <div class="card-body">
+            <ul class="list-unstyled">
+              <li>✅ Đăng ký phòng trực tuyến</li>
+              <li>✅ Xem thông tin hợp đồng</li>
+              <li>✅ Theo dõi thanh toán</li>
+              <li>✅ Gửi yêu cầu hỗ trợ</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-header bg-primary text-white">
+            <h5>⚙️ Dành cho Quản lý</h5>
+          </div>
+          <div class="card-body">
+            <ul class="list-unstyled">
+              <li>✅ Quản lý tòa nhà & phòng</li>
+              <li>✅ Quản lý hợp đồng</li>
+              <li>✅ Theo dõi thanh toán</li>
+              <li>✅ Báo cáo thống kê</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

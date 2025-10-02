@@ -1,0 +1,110 @@
+<!-- payment/templates/payment/payment_detail.html -->
+{% extends 'base.html' %}
+
+{% block title %}Chi tiết Hóa đơn #{{ payment.id }}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">🧾 Chi tiết Hóa đơn #{{ payment.id }}</h4>
+            </div>
+            <div class="card-body">
+                <!-- Thông tin hóa đơn -->
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <h6>📋 Thông tin Hóa đơn</h6>
+                        <p><strong>Mã HĐ:</strong> #{{ payment.id }}</p>
+                        <p><strong>Số tiền:</strong> {{ payment.amount|floatformat:0 }} VNĐ</p>
+                        <p><strong>Phương thức:</strong> {{ payment.get_payment_method_display }}</p>
+                        <p><strong>Trạng thái:</strong> 
+                            <span class="badge 
+                                {% if payment.status == 'paid' %}bg-success
+                                {% elif payment.status == 'pending' %}bg-warning
+                                {% else %}bg-danger{% endif %}">
+                                {{ payment.get_status_display }}
+                            </span>
+                        </p>
+                    </div>
+                    <div class="col-md-6">
+                        <h6>📅 Thời gian</h6>
+                        <p><strong>Hạn thanh toán:</strong> {{ payment.due_date|date:"d/m/Y" }}</p>
+                        <p><strong>Ngày thanh toán:</strong> 
+                            {% if payment.paid_date %}
+                                {{ payment.paid_date|date:"d/m/Y" }}
+                            {% else %}
+                                <span class="text-muted">Chưa thanh toán</span>
+                            {% endif %}
+                        </p>
+                        <p><strong>Mã giao dịch:</strong> 
+                            {% if payment.transaction_id %}
+                                {{ payment.transaction_id }}
+                            {% else %}
+                                <span class="text-muted">Chưa có</span>
+                            {% endif %}
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Thông tin hợp đồng -->
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <h6>📄 Thông tin Hợp đồng</h6>
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <tr>
+                                    <th>Số hợp đồng</th>
+                                    <td>{{ payment.contract.contract_number }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Sinh viên</th>
+                                    <td>
+                                        {{ payment.contract.student.student_id }} - 
+                                        {{ payment.contract.student.full_name }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Phòng</th>
+                                    <td>
+                                        {{ payment.contract.room.building.name }} - 
+                                        Phòng {{ payment.contract.room.room_number }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Loại phòng</th>
+                                    <td>{{ payment.contract.room.room_type.name }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Giá thuê/tháng</th>
+                                    <td>{{ payment.contract.room.room_type.price_per_month|floatformat:0 }} VNĐ</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ghi chú -->
+                {% if payment.notes %}
+                <div class="row">
+                    <div class="col-12">
+                        <h6>📝 Ghi chú</h6>
+                        <div class="alert alert-light">
+                            {{ payment.notes }}
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- Nút điều hướng -->
+                <div class="d-flex justify-content-between">
+                    <a href="{% url 'payment_list' %}" class="btn btn-secondary">← Quay lại</a>
+                    {% if user.user_type != 'student' %}
+                    <a href="{% url 'payment_update' payment.pk %}" class="btn btn-primary">✏️ Cập nhật</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,60 @@
+<!-- dormitory/templates/dormitory/contract_form.html -->
+{% extends 'base.html' %}
+
+{% block title %}{% if form.instance.pk %}Sửa{% else %}Thêm{% endif %} Hợp đồng{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4>{% if form.instance.pk %}✏️ Sửa{% else %}➕ Thêm{% endif %} Hợp đồng</h4>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Số hợp đồng *</label>
+                            {{ form.contract_number }}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Sinh viên *</label>
+                            {{ form.student }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Phòng *</label>
+                            {{ form.room }}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Trạng thái</label>
+                            {{ form.status }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Ngày bắt đầu *</label>
+                            {{ form.start_date }}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Ngày kết thúc *</label>
+                            {{ form.end_date }}
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Tiền đặt cọc *</label>
+                        {{ form.deposit }}
+                        <small class="form-text text-muted">VNĐ</small>
+                    </div>
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="{% url 'contract_list' %}" class="btn btn-secondary me-md-2">↩️ Quay lại</a>
+                        <button type="submit" class="btn btn-primary">💾 Lưu</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

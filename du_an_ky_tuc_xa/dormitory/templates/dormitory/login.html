@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block title %}Đăng nhập{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">🔐 Đăng nhập Hệ thống</h4>
+                </div>
+                <div class="card-body">
+                    {% if messages %}
+                        {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }} alert-dismissible fade show">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                        {% endfor %}
+                    {% endif %}
+
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Tên đăng nhập</label>
+                            <input type="text" name="username" class="form-control" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Mật khẩu</label>
+                            <input type="password" name="password" class="form-control" required>
+                        </div>
+                        
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg">Đăng nhập</button>
+                            <a href="/admin/" class="btn btn-outline-secondary">⚙️ Quản trị viên</a>
+                        </div>
+                    </form>
+
+                    <div class="text-center mt-3">
+                        <p class="mb-1">Sinh viên mới?</p>
+                        <p class="small text-muted">Liên hệ quản trị viên để được tạo tài khoản</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

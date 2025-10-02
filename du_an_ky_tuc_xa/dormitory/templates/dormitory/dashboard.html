@@ -1,0 +1,237 @@
+<!-- dormitory/templates/dormitory/dashboard.html -->
+{% extends 'base.html' %}
+
+{% block title %}Dashboard Quản lý{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>📊 Dashboard Quản lý</h1>
+    <div>
+        <span class="badge bg-primary fs-6">Quản lý</span>
+        <small class="text-muted ms-2">Xin chào, {{ user.username }}</small>
+    </div>
+</div>
+
+<!-- Thống kê nhanh -->
+<div class="row">
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-primary shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                            Tòa nhà
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                            {{ stats.total_buildings }}
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-building fa-2x text-gray-300">🏢</i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-success shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                            Tổng phòng
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                            {{ stats.total_rooms }}
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-door-closed fa-2x text-gray-300">🚪</i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-info shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                            Phòng trống
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                            {{ stats.available_rooms }}
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-bed fa-2x text-gray-300">🛏️</i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-warning shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                            Sinh viên
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                            {{ stats.total_students }}
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-users fa-2x text-gray-300">👥</i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Hàng thống kê thứ 2 -->
+<div class="row">
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-danger shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
+                            Hợp đồng Active
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                            {{ stats.active_contracts }}
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-file-contract fa-2x text-gray-300">📄</i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-secondary shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-secondary text-uppercase mb-1">
+                            Phòng đã thuê
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                            {{ stats.occupied_rooms }}
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-home fa-2x text-gray-300">🏠</i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-dark shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-dark text-uppercase mb-1">
+                            Sắp hết hạn
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                            {{ stats.upcoming_expiry }}
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-clock fa-2x text-gray-300">⏰</i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-success shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                            Tỷ lệ lấp đầy
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                            {{ stats.occupancy_percentage|floatformat:1 }}%
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-chart-pie fa-2x text-gray-300">📈</i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Menu chức năng nhanh -->
+<div class="row mt-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h5>🚀 Chức năng nhanh</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <a href="/admin/dormitory/building/" class="btn btn-outline-primary w-100">
+                            🏢 Quản lý Tòa nhà
+                        </a>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <a href="/admin/dormitory/room/" class="btn btn-outline-success w-100">
+                            🚪 Quản lý Phòng
+                        </a>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <a href="/admin/dormitory/student/" class="btn btn-outline-info w-100">
+                            🎓 Quản lý Sinh viên
+                        </a>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <a href="/admin/dormitory/contract/" class="btn btn-outline-warning w-100">
+                            📄 Quản lý Hợp đồng
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <h5>📈 Thống kê chi tiết</h5>
+            </div>
+            <div class="card-body">
+                <p>📊 <strong>Tổng quan hệ thống:</strong></p>
+                <ul class="list-unstyled">
+                    <li>✅ Tổng số tòa nhà: <strong>{{ stats.total_buildings }}</strong></li>
+                    <li>✅ Tổng số phòng: <strong>{{ stats.total_rooms }}</strong></li>
+                    <li>✅ Phòng trống: <strong>{{ stats.available_rooms }}</strong></li>
+                    <li>✅ Phòng đã thuê: <strong>{{ stats.occupied_rooms }}</strong></li>
+                    <li>✅ Tổng sinh viên: <strong>{{ stats.total_students }}</strong></li>
+                    <li>⚠️ Hợp đồng sắp hết hạn: <strong>{{ stats.upcoming_expiry }}</strong></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% if overdue_payments or upcoming_payments %}
+{% include 'payment/payment_notifications.html' %}
+{% endif %}
+{% endblock %}
